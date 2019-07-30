@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour
 {
+    public string storeAdminURL = "https://the-underground-games.myshopify.com/admin";
+
     public void Quit()
     {
         Application.Quit();
@@ -12,7 +14,7 @@ public class ButtonManager : MonoBehaviour
 
     public void StoreAdmin()
     {
-        Application.OpenURL("https://the-underground-games.myshopify.com/admin");   //URL subject to change
+        Application.OpenURL(storeAdminURL);   //URL subject to change
     }
 
     public void ChangeScene(string sceneName)

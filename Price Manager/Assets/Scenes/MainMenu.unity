@@ -145,8 +145,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 592.04, y: 118.1}
-  m_SizeDelta: {x: 979.1, y: 41.3}
+  m_AnchoredPosition: {x: 624.7, y: 118.1}
+  m_SizeDelta: {x: 1044.5, y: 41.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &126887079
 MonoBehaviour:
@@ -180,7 +180,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Make sure an updated price list is downloaded before running!
+  m_Text: Make sure an updated price list and API key is downloaded before running!
 --- !u!222 &126887080
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -771,6 +771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bf8f3e7be39b2243a3775c111ac3a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storeAdminURL: https://the-underground-games.myshopify.com/admin
 --- !u!114 &1455980142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -906,6 +907,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bf8f3e7be39b2243a3775c111ac3a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storeAdminURL: https://the-underground-games.myshopify.com/admin
 --- !u!114 &1673616199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1193,6 +1195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bf8f3e7be39b2243a3775c111ac3a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storeAdminURL: https://the-underground-games.myshopify.com/admin
 --- !u!114 &1796710065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1311,8 +1314,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.5, y: -154.6}
-  m_SizeDelta: {x: 1653.1, y: 627.5}
+  m_AnchoredPosition: {x: 2.5, y: -143.1}
+  m_SizeDelta: {x: 1653.1, y: 650.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1876918990
 MonoBehaviour:
@@ -1349,10 +1352,11 @@ MonoBehaviour:
   m_Text: "This is the Pricing Manager system for The Underground. \nThis system will
     receive pricing updates for product and list corrective actions for approval.\n\nBefore
     running, make sure that an updated price list is loaded to \n%USERPROFILE%\\AppData\\LocalLow\\The
-    Underground\\Price Manager\n\nAn updated price list can be downloaded from Store
-    Admin. When importing, make sure that column \"Body (HTML) is empty\".\n\n\nDeveloped
-    by Michael Cox for The Underground Games LLC. Using Unity 2018. \nUses Best Buy
-    store API and LitJSON."
+    Underground\\Price Manager\nAlso make sure that a Best Buy API key is stored in
+    the same location \nand is called \"key.txt\".\n\nAn updated price list can be
+    downloaded from Store Admin. When importing, make sure that column \"Body (HTML)
+    is empty\".\n\n\nDeveloped by Michael Cox for The Underground Games LLC. Using
+    Unity 2018.2.0f2\nUses Best Buy store API and LitJSON."
 --- !u!222 &1876918991
 CanvasRenderer:
   m_ObjectHideFlags: 0

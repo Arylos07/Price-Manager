@@ -53,6 +53,7 @@ public class JSON_D : MonoBehaviour
     {
 
         status.text = "Initializing...";
+        APIKey = GetAPIKey.GetKey();
 
         timeEstimate.text = string.Empty;
         string fileData = File.ReadAllText(Application.persistentDataPath + "/products_export.csv");
@@ -113,6 +114,7 @@ public class JSON_D : MonoBehaviour
         StartCoroutine(PricingUpdate());
 
         yield return null;
+        
     }
 
     public IEnumerator PricingUpdate()
@@ -123,76 +125,85 @@ public class JSON_D : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        status.text = "Getting pricing updates";
-
-        foreach (string sku in keys)
+        if (APIKey != string.Empty)
         {
-            string url = "https://api.bestbuy.com/v1/products/" + sku + ".json?apiKey=" + APIKey;
-            WWW www = new WWW(url);
-            yield return www;
-            if (www.error == null)
+
+            status.text = "Getting pricing updates";
+
+            foreach (string sku in keys)
             {
-                //print(www.text);
-                Processjson(www.text);
+                string url = "https://api.bestbuy.com/v1/products/" + sku + ".json?apiKey=" + APIKey;
+                WWW www = new WWW(url);
+                yield return www;
+                if (www.error == null)
+                {
+                    //print(www.text);
+                    Processjson(www.text);
+                }
+                else
+                {
+                    GameObject failed = Instantiate(failedSKU, failedSKUContent.transform);
+                    failed.GetComponent<Text>().text = sku + " - " + www.error;
+                    failed = null;
+                }
+
+                progress++;
+                intProgress++;
+
+                loadingBar.fillAmount = ((float)progress / (float)keys.Count);
+                progressText.text = (((float)progress / (float)keys.Count) * 100).ToString("F2") + "%";
+
+                int timer = (keys.Count - progress);
+
+                float minutes = Mathf.Floor((float)timer / 60);
+                float seconds = Mathf.RoundToInt((float)timer % 60);
+
+                timeEstimate.text = "Est time: " + minutes + " min, " + seconds + " sec";
+
+                if (intProgress >= 10)
+                {
+                    intProgress = 0;
+                    status.text = "Getting pricing updates";
+                }
+                status.text = status.text + ".";
+
+                yield return new WaitForSeconds(1);
             }
-            else
+
+            if (progress == keys.Count)
             {
-                GameObject failed = Instantiate(failedSKU, failedSKUContent.transform);
-                failed.GetComponent<Text>().text = sku + " - " + www.error;
-                failed = null;
+                status.text = "Finalizing list...";
+
+                foreach (KeyValuePair<string, string> item in updates)
+                {
+                    GameObject instance = Instantiate(itemField, contentView.transform);
+                    instance.GetComponent<UpdateSKU>().name = itemNames[item.Key];
+                    instance.GetComponent<UpdateSKU>().SKU = item.Key;
+                    instance.GetComponent<UpdateSKU>().Price = item.Value;
+                    instance.GetComponent<UpdateSKU>().dataManager = gameObject.GetComponent<JSON_D>();
+                    instance.GetComponent<UpdateSKU>().Init();
+
+                    instance = null;
+                }
+                yield return new WaitForSeconds(1);
+                panel.SetActive(false);
+                status.text = string.Empty;
+
+                if (updates.Count == 0)
+                {
+                    status.text = "No prices needing updating";
+                }
+
+                else
+                {
+                    status.text = "Price update complete: " + updates.Count + " SKU's to review.";
+                }
             }
-
-            progress++;
-            intProgress++;
-
-            loadingBar.fillAmount = ((float)progress / (float)keys.Count);
-            progressText.text = (((float)progress / (float)keys.Count) * 100).ToString("F2") + "%";
-
-            int timer = (keys.Count - progress);
-
-            float minutes = Mathf.Floor((float)timer / 60);
-            float seconds = Mathf.RoundToInt((float)timer % 60);
-
-            timeEstimate.text = "Est time: " + minutes + " min, " + seconds + " sec";
-
-            if(intProgress >= 10)
-            {
-                intProgress = 0;
-                status.text = "Getting pricing updates";
-            }
-            status.text = status.text + ".";
-
-            yield return new WaitForSeconds(1);
         }
-
-        if (progress == keys.Count)
+        else if(APIKey == string.Empty)
         {
-            status.text = "Finalizing list...";
-
-            foreach (KeyValuePair<string, string> item in updates)
-            {
-                GameObject instance = Instantiate(itemField, contentView.transform);
-                instance.GetComponent<UpdateSKU>().name = itemNames[item.Key];
-                instance.GetComponent<UpdateSKU>().SKU = item.Key;
-                instance.GetComponent<UpdateSKU>().Price = item.Value;
-                instance.GetComponent<UpdateSKU>().dataManager = gameObject.GetComponent<JSON_D>();
-                instance.GetComponent<UpdateSKU>().Init();
-
-                instance = null;
-            }
-            yield return new WaitForSeconds(1);
+            status.text = "Could not retrieve API Key from file.";
             panel.SetActive(false);
-            status.text = string.Empty;
-
-            if (updates.Count == 0)
-            {
-                status.text = "No prices needing updating";
-            }
-
-            else
-            {
-                status.text = "Price update complete: " + updates.Count + " SKU's to review.";
-            }
         }
     }
 
